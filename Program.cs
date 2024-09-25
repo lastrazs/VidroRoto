@@ -1,4 +1,7 @@
-using VidroRoto.Components;
+using Microsoft.EntityFrameworkCore;
+using VidroRoto.Data;
+using VidroRoto.Interfaces;
+using VidroRoto.Repositories;
 
 namespace VidroRoto
 {
@@ -8,37 +11,36 @@ namespace VidroRoto
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddRazorComponents()
-                .AddInteractiveServerComponents();
+            // Agregar servicios al contenedor.
+            builder.Services.AddRazorPages();  // Para Razor Pages
+            builder.Services.AddServerSideBlazor();  // Para componentes interactivos
+
+            // Configuración de la base de datos usando una conexión a Azure SQL
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("AzureSqlDatabase")));
+
+            // Inyectar repositorios personalizados
+            builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configuración del pipeline HTTP
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseHsts();  // Usar HSTS en producción
             }
 
             app.UseHttpsRedirection();
-
             app.UseStaticFiles();
-            app.UseAntiforgery();
 
-            app.MapRazorComponents<App>()
-                .AddInteractiveServerRenderMode();
+            app.UseRouting();
+
+            // Mapear Razor Pages y componentes de Blazor
+            app.MapRazorPages();  // Mapear Razor Pages
+            app.MapBlazorHub();    // Mapear la ruta del hub para Blazor Server
 
             app.Run();
         }
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddRazorPages();
-
-            // Inyectar el repositorio como servicio
-            services.AddScoped<IClientRepository, ClientRepository>();
-        }
-
     }
 }

@@ -3,10 +3,11 @@
     public class Cotizacion
     {
         public int IdCotizacion { get; set; }
+        public DateTime Fecha { get; set; }
         public int IdCliente { get; set; }
         public Client Cliente { get; set; }
 
-        public DateTime Fecha { get; set; }
+       
 
         public int IdMarco { get; set; }
         public Marco Marco { get; set; }

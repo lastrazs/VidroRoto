@@ -7,56 +7,54 @@ using System;
 
 namespace VidroRoto.Repositories
 {
-    public class ClientRepository : IClientRepository
+    public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _context;
 
         // Inyección del DbContext a través del constructor
-        public ClientRepository(AppDbContext context) => _context = context;
+        public UserRepository(AppDbContext context) => _context = context;
 
         // Crear un nuevo cliente
-        public void Create(Client client)
+        public void Create(User client)
         {
-            _context.Clientes.Add(client);
+            _context.Usuarios.Add(client);
             _context.SaveChanges();  // Guarda los cambios en la base de datos
         }
 
         // Eliminar un cliente por su ID
         public void Delete(int IdCliente)
         {
-            var client = _context.Clientes.Find(IdCliente);  // Busca el cliente por ID
+            var client = _context.Usuarios.Find(IdCliente);  // Busca el cliente por ID
             if (client != null)
             {
-                _context.Clientes.Remove(client);  // Elimina el cliente
+                _context.Usuarios.Remove(client);  // Elimina el cliente
                 _context.SaveChanges();
             }
         }
 
         // Obtener un cliente por su ID
-        public Client GetById(int id)
-        {
-            return _context.Clientes.Find(id);  // Encuentra el cliente por su ID
-        }
+        public User GetById(int id) => _context.Usuarios.Find(id);  // Encuentra el cliente por su ID
 
         // Obtener todos los clientes
-        public IEnumerable<Client> GetClients()
+        public IEnumerable<User> GetUsers()
         {
-            return _context.Clientes.ToList();  // Devuelve una lista de todos los clientes
+            return _context.Usuarios.ToList();  // Devuelve una lista de todos los clientes
         }
 
         // Actualizar un cliente existente
-        public void Update(Client client)
+        public void Update(User client)
         {
-            var existingClient = _context.Clientes.Find(client.IdCliente);  // Encuentra el cliente existente
+            var existingClient = _context.Usuarios.Find(client.IdUsuario);  // Encuentra el cliente existente
             if (existingClient != null)
             {
                 existingClient.Nombre = client.Nombre;  // Actualiza las propiedades necesarias
                 existingClient.Apellido = client.Apellido;  
                 existingClient.Email = client.Email;
                 existingClient.Telefono = client.Telefono;
+                existingClient.Rol = client.Rol;
                 // Agrega más propiedades si es necesario
 
-                _context.Clientes.Update(existingClient);  // Marca el cliente como modificado
+                _context.Usuarios.Update(existingClient);  // Marca el cliente como modificado
                 _context.SaveChanges();  // Guarda los cambios en la base de datos
             }
         }

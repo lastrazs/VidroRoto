@@ -7,7 +7,7 @@ namespace VidroRoto.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<Client> Clientes { get; set; }
+        public DbSet<User> Usuarios { get; set; }
         public DbSet<Marco> Marcos { get; set; }
         public DbSet<Vidrio> Vidrios { get; set; }
         public DbSet<Herraje> Herrajes { get; set; }
@@ -16,7 +16,7 @@ namespace VidroRoto.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configuración de claves primarias
-            modelBuilder.Entity<Client>().HasKey(c => c.IdCliente);
+            modelBuilder.Entity<User>().HasKey(c => c.IdUsuario);
             modelBuilder.Entity<Marco>().HasKey(m => m.IdMarco);
             modelBuilder.Entity<Vidrio>().HasKey(v => v.IdVidrio);
             modelBuilder.Entity<Herraje>().HasKey(h => h.IdHerraje);
@@ -30,9 +30,9 @@ namespace VidroRoto.Data
 
             // Configuración de relaciones
             modelBuilder.Entity<Cotizacion>()
-                .HasOne(c => c.Cliente)
+                .HasOne(c => c.Usuario)
                 .WithMany(c => c.Cotizaciones)
-                .HasForeignKey(c => c.IdCliente);
+                .HasForeignKey(c => c.IdUser);
 
             modelBuilder.Entity<Cotizacion>()
                 .HasOne(c => c.Marco)

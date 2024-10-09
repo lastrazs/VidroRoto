@@ -20,7 +20,12 @@ namespace VidroRoto
                 options.UseSqlServer(builder.Configuration.GetConnectionString("AzureSqlDatabase")));
 
             // Inyectar repositorios personalizados
-            builder.Services.AddScoped<IClientRepository, ClientRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IVidrioRepository, VidrioRepository>();
+            builder.Services.AddScoped<ICotizacionRepository, CotizacionRepository>();
+            builder.Services.AddScoped<IHerrajeRepository, HerrajeRepository>();
+            builder.Services.AddScoped<IMarcoRepository, MarcoRepository>();
+            
 
             var app = builder.Build();
 

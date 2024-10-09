@@ -4,8 +4,8 @@
     {
         public int IdCotizacion { get; set; }
         public DateTime Fecha { get; set; }
-        public int IdCliente { get; set; }
-        public Client Cliente { get; set; }
+        public int IdUser { get; set; }
+        public User Usuario { get; set; }
 
        
 

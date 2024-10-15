@@ -5,10 +5,10 @@ namespace VidroRoto.Interfaces
 {
     public interface ICotizacionRepository
     {
-        IEnumerable<Cotizacion> GetCotizaciones();
-        Cotizacion GetById(int id);
-        void Create(Cotizacion cotizacion);
-        void Update(Cotizacion cotizacion);
-        void Delete(int Id);
+        Task<IEnumerable<Cotizacion>> GetCotizacionesAsync();
+        Task<Cotizacion> GetByIdAsync(int id);
+        Task CreateAsync(Cotizacion cotizacion);
+        Task UpdateAsync(Cotizacion cotizacion);
+        Task DeleteAsync(int Id);
     }
 }

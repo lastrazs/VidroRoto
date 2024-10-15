@@ -1,14 +1,15 @@
 ﻿using VidroRoto.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace VidroRoto.Interfaces
 {
     public interface IUserRepository
     {
-        IEnumerable<User> GetUsers();
-        User GetById(int id);
-        void Create(User user);
-        void Update(User user);
-        void Delete(int IdUser);
+        Task<IEnumerable<User>> GetUsersAsync();
+        Task<User> GetByIdAsync(int id);
+        Task CreateAsync(User user);
+        Task UpdateAsync(User user);
+        Task DeleteAsync(int idUser);
     }
 }

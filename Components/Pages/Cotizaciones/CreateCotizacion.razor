@@ -1,0 +1,59 @@
+﻿@page "/crear-cotizacion"
+@using VidroRoto.Interfaces
+@using VidroRoto.Models
+@inject ICotizacionRepository CotizacionService
+
+<h3>Crear Nueva Cotización</h3>
+
+<EditForm Model="@cotizacion" OnValidSubmit="CrearCotizacion">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <!-- Información del Cliente -->
+    <div>
+        <label>Nombre del Cliente:</label>
+        <InputText @bind-Value="cotizacion.Usuario.Nombre" />
+        <ValidationMessage For="@(() => cotizacion.Usuario.Nombre)" />
+    </div>
+
+    <!-- Información del Marco -->
+    <div>
+        <label>Precio del Marco:</label>
+        <InputNumber @bind-Value="cotizacion.Marco.Precio" />
+        <ValidationMessage For="@(() => cotizacion.Marco.Precio)" />
+    </div>
+
+    <!-- Información del Herraje -->
+    <div>
+        <label>Precio del Herraje:</label>
+        <InputNumber @bind-Value="cotizacion.Herraje.Precio" />
+        <ValidationMessage For="@(() => cotizacion.Herraje.Precio)" />
+    </div>
+
+    <button type="submit">Guardar Cotización</button>
+</EditForm>
+
+@code {
+    private Cotizacion cotizacion = new Cotizacion
+        {
+            Usuario = new User(),
+            Marco = new Marco(),
+            Vidrio = new Vidrio(),
+            Herraje = new Herraje()
+        };
+
+    private async Task CrearCotizacion()
+    {
+        try
+        {
+            await CotizacionService.CreateAsync(cotizacion);
+            // Opcional: Redirigir al usuario a la lista de cotizaciones o mostrar un mensaje de éxito
+            // NavigationManager.NavigateTo("/cotizaciones");
+        }
+        catch (Exception ex)
+        {
+            // Manejar el error
+            Console.WriteLine($"Error al crear la cotización: {ex.Message}");
+        }
+    }
+}

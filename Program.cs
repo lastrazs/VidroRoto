@@ -50,6 +50,8 @@ namespace VidrioRoto
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             // Habilitar middleware de Swagger
             app.UseSwagger();
@@ -58,6 +60,7 @@ namespace VidrioRoto
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "VidroRoto API v1");
             });
 
+           
             // Mapear Razor Pages y componentes de Blazor
             app.MapRazorPages();  // Mapear Razor Pages
             app.MapBlazorHub();    // Mapear la ruta del hub para Blazor Server

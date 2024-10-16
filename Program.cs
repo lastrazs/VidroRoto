@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using VidroRoto.Data;
 using VidroRoto.Interfaces;
 using VidroRoto.Repositories;
 
-namespace VidroRoto
+namespace VidrioRoto
 {
     public class Program
     {
@@ -25,7 +27,16 @@ namespace VidroRoto
             builder.Services.AddScoped<ICotizacionRepository, CotizacionRepository>();
             builder.Services.AddScoped<IHerrajeRepository, HerrajeRepository>();
             builder.Services.AddScoped<IMarcoRepository, MarcoRepository>();
-            
+
+            // Registrar los servicios de Swagger
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "VidroRoto API",
+                    Version = "v1"
+                });
+            });
 
             var app = builder.Build();
 
@@ -38,9 +49,18 @@ namespace VidroRoto
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
+            // Habilitar middleware de Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "VidroRoto API v1");
+            });
+
+           
             // Mapear Razor Pages y componentes de Blazor
             app.MapRazorPages();  // Mapear Razor Pages
             app.MapBlazorHub();    // Mapear la ruta del hub para Blazor Server

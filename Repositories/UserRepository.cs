@@ -1,9 +1,9 @@
 ﻿using VidroRoto.Interfaces;
 using VidroRoto.Models;
-using VidroRoto.Data;  // Asegúrate de importar el DbContext
+using VidroRoto.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
-using System;
+using System.Threading.Tasks;
 
 namespace VidroRoto.Repositories
 {
@@ -14,48 +14,51 @@ namespace VidroRoto.Repositories
         // Inyección del DbContext a través del constructor
         public UserRepository(AppDbContext context) => _context = context;
 
-        // Crear un nuevo cliente
-        public void Create(User client)
+        // Crear un nuevo usuario de forma asíncrona
+        public async Task CreateAsync(User user)
         {
-            _context.Usuarios.Add(client);
-            _context.SaveChanges();  // Guarda los cambios en la base de datos
+            _context.Usuarios.Add(user);
+            await _context.SaveChangesAsync();  // Guarda los cambios en la base de datos de manera asíncrona
         }
 
-        // Eliminar un cliente por su ID
-        public void Delete(int IdCliente)
+        // Eliminar un usuario por su ID de forma asíncrona
+        public async Task DeleteAsync(int idUsuario)
         {
-            var client = _context.Usuarios.Find(IdCliente);  // Busca el cliente por ID
-            if (client != null)
+            var user = await _context.Usuarios.FindAsync(idUsuario);  // Busca el usuario por ID
+            if (user != null)
             {
-                _context.Usuarios.Remove(client);  // Elimina el cliente
-                _context.SaveChanges();
+                _context.Usuarios.Remove(user);  // Elimina el usuario
+                await _context.SaveChangesAsync();
             }
         }
 
-        // Obtener un cliente por su ID
-        public User GetById(int id) => _context.Usuarios.Find(id);  // Encuentra el cliente por su ID
-
-        // Obtener todos los clientes
-        public IEnumerable<User> GetUsers()
+        // Obtener un usuario por su ID de forma asíncrona
+        public async Task<User> GetByIdAsync(int idUsuario)
         {
-            return _context.Usuarios.ToList();  // Devuelve una lista de todos los clientes
+            return await _context.Usuarios.FindAsync(idUsuario);  // Encuentra el usuario por su ID
         }
 
-        // Actualizar un cliente existente
-        public void Update(User client)
+        // Obtener todos los usuarios de forma asíncrona
+        public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            var existingClient = _context.Usuarios.Find(client.IdUsuario);  // Encuentra el cliente existente
-            if (existingClient != null)
+            return await _context.Usuarios.ToListAsync();  // Devuelve una lista de todos los usuarios
+        }
+
+        // Actualizar un usuario existente de forma asíncrona
+        public async Task UpdateAsync(User user)
+        {
+            var existingUser = await _context.Usuarios.FindAsync(user.IdUsuario);  // Encuentra el usuario existente
+            if (existingUser != null)
             {
-                existingClient.Nombre = client.Nombre;  // Actualiza las propiedades necesarias
-                existingClient.Apellido = client.Apellido;  
-                existingClient.Email = client.Email;
-                existingClient.Telefono = client.Telefono;
-                existingClient.Rol = client.Rol;
+                existingUser.Nombre = user.Nombre;  // Actualiza las propiedades necesarias
+                existingUser.Apellido = user.Apellido;
+                existingUser.Email = user.Email;
+                existingUser.Telefono = user.Telefono;
+                existingUser.Rol = user.Rol;
                 // Agrega más propiedades si es necesario
 
-                _context.Usuarios.Update(existingClient);  // Marca el cliente como modificado
-                _context.SaveChanges();  // Guarda los cambios en la base de datos
+                _context.Usuarios.Update(existingUser);  // Marca el usuario como modificado
+                await _context.SaveChangesAsync();  // Guarda los cambios en la base de datos de manera asíncrona
             }
         }
     }

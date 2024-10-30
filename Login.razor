@@ -1,0 +1,50 @@
+﻿// Pages/Login.razor
+@page "/login"
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+
+<h3>Iniciar Sesión</h3>
+
+<EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Email:</ label >
+        < InputText @bind - Value = "loginModel.Email" />
+        < ValidationMessage For = "@(() => loginModel.Email)" />
+    </ div >
+
+    < div >
+        < label > Contraseña:</ label >
+        < InputText @bind - Value = "loginModel.Password" Type = "password" />
+        < ValidationMessage For = "@(() => loginModel.Password)" />
+    </ div >
+
+    < button type = "submit" > Iniciar Sesión </ button >
+</ EditForm >
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+
+private async Task HandleLogin()
+{
+    var isAuthenticated = await AuthService.LoginAsync(loginModel.Email, loginModel.Password);
+
+    if (isAuthenticated)
+    {
+        NavigationManager.NavigateTo("/"); 
+    }
+    else
+    {
+       
+        Console.WriteLine("Credenciales incorrectas");
+    }
+}
+
+public class LoginModel
+{
+    public string Email { get; set; }
+    public string Password { get; set; }
+}
+}

@@ -1,0 +1,14 @@
+﻿// Pages/Logout.razor
+@page "/logout"
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+
+<h3>Cerrando Sesión...</h3>
+
+@code {
+    protected override async Task OnInitializedAsync()
+{
+    await AuthService.LogoutAsync();
+    NavigationManager.NavigateTo("/login");
+}
+}
